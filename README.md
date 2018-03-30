@@ -1,5 +1,7 @@
 # AWS Developer: Building on AWS - edx course exercises
 
+Exercises are split in directories. Each directory is named after the exercise number.
+
 ## Exercise 3
 * I have modified the CloudFocmation template provided in the course from JSON to YAML to make it less verbose and easier to reason about.
 * If you are using an intelliJ based IDE, there is a [plugin](https://github.com/shalupov/idea-cloudformation) that makes working with CloudFocmation file a little bit easier (just a little bit).
