@@ -23,6 +23,7 @@ import util
 application = Flask(__name__)
 application.secret_key = config.FLASK_SECRET
 
+
 ### FlaskForm set up
 class PhotoForm(FlaskForm):
     """flask_wtf form class the file upload"""
@@ -50,8 +51,7 @@ def home():
         photos = [s3_client.generate_presigned_url(
             'get_object',
             Params={'Bucket': config.PHOTOS_BUCKET, 'Key': content['Key']}
-            ) for content in response['Contents']]
-
+        ) for content in response['Contents']]
 
     form = PhotoForm()
     url = None
@@ -72,6 +72,19 @@ def home():
             url = s3_client.generate_presigned_url(
                 'get_object',
                 Params={'Bucket': config.PHOTOS_BUCKET, 'Key': key})
+
+            #######
+            # rekcognition exercise
+            #######
+            rek = boto3.client('rekognition')
+            response = rek.detect_labels(
+                Image={
+                    'S3Object': {
+                        'Bucket': config.PHOTOS_BUCKET,
+                        'Name': key
+                    }
+                })
+            all_labels = [label['Name'] for label in response['Labels']]
 
     return render_template_string("""
             {% extends "main.html" %}
@@ -100,7 +113,7 @@ def home():
             <span class="label label-info">{{label}}</span>
             {% endfor %}
             {% endif %}
-            
+
             {% if photos %}
             <hr/>
             <h4>Photos</h4>
